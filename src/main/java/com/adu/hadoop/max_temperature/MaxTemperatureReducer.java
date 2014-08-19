@@ -1,28 +1,22 @@
 package com.adu.hadoop.max_temperature;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.MapReduceBase;
-import org.apache.hadoop.mapred.OutputCollector;
-import org.apache.hadoop.mapred.Reducer;
-import org.apache.hadoop.mapred.Reporter;
+import org.apache.hadoop.mapreduce.Reducer;
 
-public class MaxTemperatureReducer extends MapReduceBase implements
+public class MaxTemperatureReducer extends
 		Reducer<Text, IntWritable, Text, IntWritable> {
 
-	@Override
-	public void reduce(Text key, Iterator<IntWritable> values,
-			OutputCollector<Text, IntWritable> output, Reporter reporter)
-			throws IOException {
+	public void reduce(Text key, Iterable<IntWritable> values, Context context)
+			throws IOException, InterruptedException {
 		int maxValue = Integer.MIN_VALUE;
-		while (values.hasNext()) {
-			maxValue = Math.max(maxValue, values.next().get());
+		// 求出最大值
+		for (IntWritable value : values) {
+			maxValue = Math.max(maxValue, value.get());
 		}
-		output.collect(key, new IntWritable(maxValue));
-
+		// 输出
+		context.write(key, new IntWritable(maxValue));
 	}
-
 }
