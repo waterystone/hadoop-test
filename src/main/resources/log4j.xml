@@ -20,7 +20,7 @@
 		</layout>
 	</appender>
 
-	<logger name="com.adu.hadoop_test" additivity="false">
+	<logger name="com.adu.hadoop" additivity="false">
 		<level value="DEBUG" />
 		<appender-ref ref="consoleAppender" />
 		<appender-ref ref="hadoopAppender" />
